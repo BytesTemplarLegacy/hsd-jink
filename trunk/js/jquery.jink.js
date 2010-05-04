@@ -21,6 +21,20 @@
 		jQuery(document).mouseup(function(){
 			jQuery(".jink").data('penUp')();
 		});
+		
+		jQuery(document).keydown(function(e){
+			
+			// Ctrl+Z == Undo but only for surface currently being drawn on
+			if (e.ctrlKey && (e.keyCode == 90)) {
+				var act = jQuery(".inkActive");
+				if (act.length) {
+					act.next().data('undo')();
+				}
+				return false;
+			}
+			
+			return true;
+		});
 
 		return this.each(function()
 		{
@@ -107,12 +121,6 @@
 				})
 				.mouseover(function(e) {
 					target.addClass('inkActive');
-					console.log(this.previousElementSibling);
-					//console.log(target[0].nextElementSibling);
-					this.previousElementSibling.focus();
-					this.previousElementSibling.onkeydown = function(e) {
-						alert("hi");	
-					};
 				})
 				.mouseout(function(e) {
 					target.removeClass('inkActive');
@@ -120,14 +128,24 @@
 				// Providing this hook so I can reset the pen on all the jink surfaces globally
 				.data('penUp', function() {
 					penUp();
-				});
+				})
+				.data('undo', function() {
+					undo();
+				})
+				;
 				
 				function penUp()
 				{
 					var vars = jQuery.data(target[0], "vars");
 					vars.pendown = false;
 					jQuery.data(target[0], "vars");
-				}				
+				}
+				
+				function undo()
+				{
+					// To be implemented...
+					console.log("UNDO");
+				}
 
 				function drawLine(x,y,xx,yy,target)
 				{
@@ -138,7 +156,7 @@
 
 					vars.context.strokeStyle = options.pen_color;
 					vars.context.lineWidth = options.pen_size;
-					//vars.context.lineCap  = "round";
+
 					vars.context.lineJoin = "round";
 
 					vars.context.moveTo(x,y);
