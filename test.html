@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		<script src="js/jquery.jink.js"></script>
+		<!-- script src="base64.js"></script -->
+		<!-- script src="canvas2image.js"></script -->
+		<!--<script src="excanvas.compiled.js"></script>-->
+
+		<script>
+			$(document).ready(function(){
+				$("#paper").ink({pen_color: "red"});
+				$("#paper2").ink({pen_color: "rgba(255,255,0,0.1)", pen_size: 20});
+			});
+			//----------
+			function saveit()
+			{
+				$("<img>")
+					.attr("src", $("#paper").inkDataURL())
+					.appendTo("body");
+			}
+			//----------
+			function changeColor()
+			{
+				$("#paper").inkOption("pen_color", "violet");
+			}
+		</script>
+		<style>
+			.inkActive {
+				border:	1px solid red;
+			}
+		</style>
+	</head>
+<body>
+	<div>Draw on these. (Wait for the iframe to load though.)</div>
+	<div>
+		<button onclick="saveit()">Save left ink</button>
+		<button onclick="changeColor()">Change left ink color</button>
+	</div>
+	<img id="paper" src="paper.jpg" width="640">
+
+	<!--<img id="paper2" src="paper.png">-->
+	<iframe width="480" height="640" id="paper2" src="http://m.yahoo.com/"></iframe>
+</body>
+</html>
